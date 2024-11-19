@@ -176,9 +176,16 @@ class EventController extends Controller {
 
     public function teamsdestroy($id) {
 
-        Equipe::findOrFail($id)->delete();
+        $equipe = Equipe::findOrFail($id);
 
-        return redirect('/teamsdashboard')->with('msg', 'Seu time foi excluída com sucesso!');
+        // Verifique se o time está associado a uma agenda
+        if ($equipe->agendas()->exists()) {
+            return redirect('/teamsdashboard')->with('error', 'Não é possível excluir este time porque ele está associado a uma agenda.');
+        }
+
+        $equipe->delete();
+
+        return redirect('/teamsdashboard')->with('success', 'Seu time excluído com sucesso.');
     }
 
     public function edit($id) {

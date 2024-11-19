@@ -16,6 +16,11 @@ class Equipe extends Model
         return $this->hasMany(Agenda::class, 'equipe_me');
     }
 
+    public function agendas()
+    {
+        return $this->hasMany(Agenda::class, 'equipe_me');
+    }
+
     public function agendasComoEquipeAdversario()
     {
         return $this->hasMany(Agenda::class, 'equipe_adversario');

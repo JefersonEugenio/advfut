@@ -42,6 +42,14 @@ header {
     padding: 10px;
 }
 
+.alert.alert-danger {
+    text-align: center;
+}
+
+.alert.alert-success {
+    text-align: center;
+}
+
 #info-container .already-joined-msg {
     margin: 15px 0;
     color: #004085;
