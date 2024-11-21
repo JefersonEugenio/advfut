@@ -26,7 +26,11 @@
             @foreach($equipes as $equipe)
                 @if($agenda->equipe_me == $equipe->id)
                     <div class="card col-md-3">
-                        <img src="/img/events/{{ $equipe->imagem }}" alt="{{ $equipe->clube }}">
+                        @if(!empty($equipe->imagem) && file_exists(public_path("img/events/{$equipe->imagem}")))
+                            <img src="/img/events/{{ $equipe->imagem }}" alt="{{ $equipe->clube }}">
+                        @else
+                            <img src="/img/emblema.png" alt="emblema vazio">
+                        @endif
                         <div class="card-body">
                             <h5 class="card-title">{{ $equipe->clube }}</h5>equipe id: {{$equipe->id}}
                             <div class="card-date">Quadra: {{ $agenda->tipo }}</div>
