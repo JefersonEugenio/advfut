@@ -183,6 +183,11 @@ class EventController extends Controller {
             return redirect('/teamsdashboard')->with('error', 'Não é possível excluir este time porque ele está associado a uma agenda.');
         }
 
+        // Verifique se o time está associado como "equipe_adversario"
+        if (Agenda::where('equipe_adversario', $id)->exists()) {
+            return redirect('/teamsdashboard')->with('error', 'Não é possível excluir este time porque ele está associado como adversário em uma agenda. Saia ou desista do jogo primeiro.');
+        }
+
         $equipe->delete();
 
         return redirect('/teamsdashboard')->with('success', 'Seu time excluído com sucesso.');
@@ -251,7 +256,7 @@ class EventController extends Controller {
         $agendas = Agenda::findOrFail($id);
 
         if ($agendas->user_id == $user->id) {
-            return redirect('/adversary')->with('msg', 'Você não pode confirmar participação com o mesmo dono que criou a partida.');
+            return redirect('/adversary')->with('error', 'Você não pode confirmar participação com o mesmo dono que criou a partida.');
         }
         
         // Define o time adversário com base no valor selecionado no formulário
@@ -308,7 +313,7 @@ class EventController extends Controller {
         // Apagar a agenda
         $agenda->delete();
     
-        return redirect()->back()->with('message', 'Agenda deletada com sucesso!');
+        return redirect('/dashboard')->with('msg', 'Agenda deletada com sucesso!');
     }
 
     public function notifications() {
