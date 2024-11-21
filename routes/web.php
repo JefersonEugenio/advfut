@@ -23,7 +23,7 @@ Route::post('/register', [RegisteredUserController::class, 'store'])->name('regi
 Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth');
 Route::get('/events/edit/{id}', [EventController::class, 'edit'])->middleware('auth');
 Route::put('/events/update/{id}', [EventController::class, 'update'])->middleware('auth');
-Route::delete('/events/{id}', [EventController::class, 'destroy'])->middleware('auth');
+Route::delete('/events/{id}', [EventController::class, 'deleteAgenda'])->middleware('auth');
 
 Route::get('/teamsdashboard', [EventController::class, 'teams'])->middleware('auth');
 Route::get('/events/teamsedit/{id}', [EventController::class, 'teamsedit'])->middleware('auth');
