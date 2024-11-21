@@ -6,7 +6,7 @@
 
 <div id="event-create-container" class="col-md-6 offset-md-3">
     <h1>Editando: {{ $agenda->equipeMe->clube }}</h1>
-    <form action="/events/update/{{ $agenda->id }}" method="POST" enctype="multipart/form-data">
+    <form action="/events/update/{{ $agenda->id }}" method="POST" enctype="multipart/form-data" id="eventForm">
         @csrf
         @method('PUT')
         <div class="form-group">
