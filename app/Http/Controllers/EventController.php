@@ -6,6 +6,7 @@ use App\Models\Equipe;
 use App\Models\Agenda;
 use App\Models\User;
 use App\Notifications\AgendaDeletedNotification;
+use App\Notifications\AgendaJoinedNotification;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -253,6 +254,7 @@ class EventController extends Controller {
     public function joinEvent(Request $request, $id) {
 
         $user = auth()->user();
+
         $agendas = Agenda::findOrFail($id);
 
         if ($agendas->user_id == $user->id) {
@@ -263,10 +265,19 @@ class EventController extends Controller {
         $agendas->equipe_adversario = $request->equipe_id;
         $agendas->save();
 
+        $timeCriador = $agendas->equipeMe;
+    
+        if ($timeCriador && $timeCriador->user) {
+            $criador = $timeCriador->user;
+            Log::info('Enviando notificação para o criador do time: ' . $criador->id);
+            $criador->notify(new AgendaJoinedNotification($agendas));
+        } else {
+            Log::warning('Falha ao localizar criador ou usuário associado.');
+        }
+
         if ($user->equipes->isEmpty()) {
             return redirect('/dashboard')->with('msg', 'Você precisa criar um time antes de confirmar participação.');
         }
-
 
         $user->agendasAsParticipant()->attach($id);
 
