@@ -35,7 +35,7 @@ class AgendaDeletedNotification extends Notification
 
     public function toDatabase($notifiable) {
         return [
-            'message' => 'A agenda foi excluída ou cancelada.',
+            'message' => 'A agenda para o jogo ' . $this->agenda->equipeMe->clube . ' x ' . $this->agenda->equipeAdversario->clube . ' foi excluída ou cancelada.',
         ];
     }
 
@@ -59,8 +59,10 @@ class AgendaDeletedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message' => "A agenda de um adversário foi apagada.",
+            'message' => "A agenda de um adversário foi apagada. toArray",
             'agenda_id' => $this->agenda->id,
+            'equipe_nome' => $this->equipe->clube,
+            'agenda_date' => $this->agenda->data,
         ];
     }
 }
