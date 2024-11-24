@@ -318,8 +318,14 @@ class EventController extends Controller {
 
     public function notifications() {
         $user = auth()->user(); // Usuário autenticado
-        $notifications = $user->notifications()->latest()->get(); 
+
+        // Marcar todas as notificações não lidas como lidas
+        $user->unreadNotifications->markAsRead();
+
+        // Retornar todas as notificações (lidas e não lidas)
+        $notifications = $user->notifications()->latest()->get();
 
         return view('notifications.index', ['notifications' => $notifications]);
     }
+
 }
