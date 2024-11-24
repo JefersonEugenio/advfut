@@ -86,7 +86,7 @@
                                     @csrf
                                     @method("DELETE")
                                     <button type="submit" class="btn btn-danger delete-btn">
-                                        <ion-icon name="trash-outline"></ion-icon>Cancelar participação
+                                        <ion-icon name="trash-outline"></ion-icon>Desistir participação
                                     </button>
                                 </form>
                             </td>

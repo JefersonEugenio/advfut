@@ -57,7 +57,7 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="title">Endereço do local:</label>
+            <label for="title">Endereço e número do local:</label>
             <input type="text" class="form-control" id="endereco" name="endereco" placeholder="Ex: Rua Maria Zélia, 870" required>
         </div>
         <div class="form-group">
