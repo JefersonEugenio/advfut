@@ -7,6 +7,7 @@ use App\Models\Agenda;
 use App\Models\User;
 use App\Notifications\AgendaDeletedNotification;
 use App\Notifications\AgendaJoinedNotification;
+use App\Notifications\AgendaDesistirNotification;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -288,14 +289,23 @@ class EventController extends Controller {
         
         $equipe = Equipe::findOrFail($id);
 
-        $agendas = Agenda::where('equipe_adversario', $equipe->id)->get();
+        $agenda = Agenda::where('equipe_adversario', $equipe->id)->first();
 
-        foreach ($agendas as $agenda ) {
-                $agenda->equipe_adversario = null;
-                $agenda->save();
+        if (!$agenda) {
+            return redirect('/dashboard')->with('error', 'Nenhuma partida encontrada para desistência.');
         }
 
-        return redirect('/dashboard')->with('msg', 'Seu time saiu com sucesso do jogo contra o adversário: ' . $agenda->equipeMe->clube );
+        // Notificar o dono do evento (usuário que criou a agenda)
+        $criadorAgenda = $agenda->user; // Assumindo relação belongsTo em Agenda com User
+
+        if ($criadorAgenda) {
+            $criadorAgenda->notify(new AgendaDesistirNotification($agenda));
+        }
+
+        $agenda->equipe_adversario = null;
+        $agenda->save();
+
+        return redirect('/dashboard')->with('msg', 'Seu time desistiu com sucesso do jogo contra o adversário: ' . $agenda->equipeMe->clube );
     }
 
     public function deleteAgenda($agendaId) {
