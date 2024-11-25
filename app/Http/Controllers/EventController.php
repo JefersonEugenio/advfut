@@ -157,7 +157,7 @@ class EventController extends Controller {
         ]);
     }
 
-    public function teams() {
+    public function teamsdashboard() {
 
         $user = auth()->user();
 
@@ -167,6 +167,24 @@ class EventController extends Controller {
             'user' => $user,
             'equipes' => $equipes
         ]);
+    }
+
+    public function teams($id) {
+        // Verifique se o usuário autenticado já está participando deste evento
+        $user = auth()->user();
+
+        $equipe = Equipe::findOrFail($id);
+    
+        // Encontre o dono do evento
+        $eventOwner = User::where('id', $equipe->user_id)->first();
+    
+    
+        return view('events.teams', [
+            'user' => $user,
+            'equipe' => $equipe,
+            'eventOwner' => $eventOwner
+        ]);
+
     }
 
     public function destroy($id) {
