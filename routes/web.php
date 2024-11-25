@@ -25,7 +25,8 @@ Route::get('/events/edit/{id}', [EventController::class, 'edit'])->middleware('a
 Route::put('/events/update/{id}', [EventController::class, 'update'])->middleware('auth');
 Route::delete('/events/{id}', [EventController::class, 'deleteAgenda'])->middleware('auth');
 
-Route::get('/teamsdashboard', [EventController::class, 'teams'])->middleware('auth');
+Route::get('/teamsdashboard', [EventController::class, 'teamsdashboard'])->middleware('auth');
+Route::get('/teams/{id}', [EventController::class, 'teams'])->middleware('auth');
 Route::get('/events/teamsedit/{id}', [EventController::class, 'teamsedit'])->middleware('auth');
 Route::put('/events/teamsupdate/{id}', [EventController::class, 'teamsupdate'])->middleware('auth');
 Route::delete('/teamsevents/{id}', [EventController::class, 'teamsdestroy'])->middleware('auth');
