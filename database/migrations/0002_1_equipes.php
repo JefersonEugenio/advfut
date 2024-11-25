@@ -14,6 +14,8 @@ return new class extends Migration
             $table->string('clube', 100);
             $table->string('imagem');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
+            $table->tinyInteger('avaliacao_nota')->nullable()->default(0)->check('avaliacao_nota >= 0 and avaliacao_nota <= 5');
+            $table->text('avaliacao_comentarios')->nullable();
             $table->timestamps();
         });
     }
