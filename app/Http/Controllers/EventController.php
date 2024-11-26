@@ -64,6 +64,7 @@ class EventController extends Controller {
         $agendas->cidade = $request->cidade;
         $agendas->pagamento = $request->pagamento;
         $agendas->observacao = $request->observacao;
+        $agendas->status = $request->status;
         
         $agendas->save();
 
@@ -365,6 +366,37 @@ class EventController extends Controller {
         $notifications = $user->notifications()->latest()->get();
 
         return view('notifications.index', ['notifications' => $notifications]);
+    }
+
+    public function finalizar(Request $request, $id)
+    {
+        // Encontrar a agenda
+        $agenda = Agenda::findOrFail($id);
+        $adversario = $agenda->equipeAdversario;
+
+        $agenda->status = $request->status;
+
+        // Validar os dados enviados
+        $validated = $request->validate([
+            'resultado' => 'required|string|max:10',
+        ]);
+
+        // Atualizar os campos com os dados fornecidos
+        $agenda->resultado = $validated['resultado'];
+        $agenda->save();
+
+        $adversario->avaliacao_nota = $request->notas_adversario;
+        $adversario->avaliacao_comentarios = $request->comentarios;
+        $adversario->save();
+
+        // Redirecionar com uma mensagem de sucesso
+        return redirect('/dashboard')->with('msg', 'Resultado e comentários registrados com sucesso!');
+    }
+
+    public function finalizarJogo($id)
+    {
+        $agenda = Agenda::findOrFail($id);
+        return view('events.finalizar', ['agenda' => $agenda]);
     }
 
 }

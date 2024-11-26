@@ -32,6 +32,8 @@ Route::put('/events/teamsupdate/{id}', [EventController::class, 'teamsupdate'])-
 Route::delete('/teamsevents/{id}', [EventController::class, 'teamsdestroy'])->middleware('auth');
 
 Route::get('/notifications', [EventController::class, 'notifications'])->name('notifications');
+Route::get('/events/{id}/finalizar', [EventController::class, 'finalizarJogo'])->middleware('auth');
+Route::patch('/events/{id}/finalizar', [EventController::class, 'finalizar'])->middleware('auth');
 
 Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->middleware('auth');
 Route::delete('/events/leave/{id}', [EventController::class, 'leaveEvent'])->middleware('auth');

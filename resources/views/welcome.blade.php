@@ -22,7 +22,7 @@
     
     <div id="cards-container" class="row">
     @foreach($agendas as $agenda)
-        @if($agenda->id)
+        @if($agenda->id && $agenda->status == 1)
             @foreach($equipes as $equipe)
                 @if($agenda->equipe_me == $equipe->id)
                     <div class="card col-md-3">

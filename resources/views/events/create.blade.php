@@ -80,6 +80,7 @@
             <label for="title">Observação:</label>
             <textarea name="observacao" id="observacao" class="form-control" placeholder="O time iniciante"></textarea>
         </div>
+        <input type="hidden" name="status" value="1">
         <input type="submit" value="Criar partida" class="btn btn-primary">
     </form>
 </div>

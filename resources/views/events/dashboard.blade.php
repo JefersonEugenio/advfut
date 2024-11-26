@@ -21,7 +21,7 @@
                     </tr>
                 </thead>
                 @foreach($agendas as $agenda)
-                    @if(auth()->id() == $agenda->user_id)
+                    @if(auth()->id() == $agenda->user_id && $agenda->status == 1)
                         <tbody>                    
                             <tr>
                                 <td>
@@ -36,6 +36,11 @@
                                     {{ date('d/m/y', strtotime($agenda->data)) }}
                                 </td>
                                 <td>
+                                    @if($agenda->equipeAdversario && $agenda->equipeAdversario->clube != null)
+                                        <a href="/events/{{ $agenda->id }}/finalizar" class="btn btn-warning edit-btn">
+                                            <ion-icon name="checkmark-outline"></ion-icon>Finalizar
+                                        </a>
+                                    @endif
                                     <a href="/events/edit/{{ $agenda->id }}" class="btn btn-info edit-btn"><ion-icon name="create-outline"></ion-icon>Editar</a>
                                     <form action="/events/{{ $agenda->id }}" method="POST">
                                         @csrf
@@ -75,7 +80,7 @@
         
             <tbody>
                 @foreach($agendas as $agenda)
-                    @if(auth()->id() == optional($agenda->equipeAdversario)->user_id)
+                    @if(auth()->id() == optional($agenda->equipeAdversario)->user_id && $agenda->status == 1)
                     Meu id: {{auth()->id()}} - agenda: {{ $agenda->id }} - equipe id: {{ $agenda->equipeAdversario->id }}
                         <tr>
                             <td>{{ $agenda->equipeAdversario->clube }}</td>
