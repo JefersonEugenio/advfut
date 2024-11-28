@@ -16,7 +16,7 @@
                     <tr>
                         <th scope="col">Nome do meu time</th>
                         <th scope="col">Nome do adversário</th>
-                        <th scope="col">Data</th>
+                        <th scope="col">Data e horario</th>
                         <th scope="col">Ações</th>
                     </tr>
                 </thead>
@@ -25,15 +25,15 @@
                         <tbody>                    
                             <tr>
                                 <td>
-                                    {{ $agenda->equipeMe->clube }}<br>
+                                    <a href="/teams/{{ $agenda->equipeMe->id }}">{{ $agenda->equipeMe->clube }}</a>
                                 </td>
                                 <td>
                                     @if($agenda->equipeAdversario && $agenda->equipeAdversario->clube != null)
-                                        {{ $agenda->equipeAdversario->clube }}
+                                        <a href="/teams/{{ $agenda->equipeAdversario->id }}">{{ $agenda->equipeAdversario->clube }}</a>
                                     @endif
                                 </td>
                                 <td>
-                                    {{ date('d/m/y', strtotime($agenda->data)) }}
+                                    <a href="/events/{{ $agenda->id }}">{{ date('d/m/y', strtotime($agenda->data)) }} - {{ \Carbon\Carbon::parse($agenda->hora)->format('H:i') }}</a>
                                 </td>
                                 <td>
                                     @if($agenda->equipeAdversario && $agenda->equipeAdversario->clube != null)
@@ -73,7 +73,7 @@
                 <tr>
                     <th scope="col">Meu time</th>
                     <th scope="col">Adversário</th>
-                    <th scope="col">Data</th>
+                    <th scope="col">Data e horario</th>
                     <th scope="col">Ações</th>
                 </tr>
             </thead>
@@ -83,9 +83,14 @@
                     @if(auth()->id() == optional($agenda->equipeAdversario)->user_id && $agenda->status == 1)
                     Meu id: {{auth()->id()}} - agenda: {{ $agenda->id }} - equipe id: {{ $agenda->equipeAdversario->id }}
                         <tr>
-                            <td>{{ $agenda->equipeAdversario->clube }}</td>
-                            <td>{{ $agenda->equipeMe->clube }}</td>
-                            <td>{{ date('d/m/y', strtotime($agenda->data)) }}</td>
+                            <td>
+                                <a href="/teams/{{ $agenda->equipeAdversario->id }}">{{ $agenda->equipeAdversario->clube }}</a>
+                            </td>
+                            <td>
+                                <a href="/teams/{{ $agenda->equipeMe->id }}">{{ $agenda->equipeMe->clube }}</a>   
+                            </td>
+                            <td>
+                                <a href="/events/{{ $agenda->id }}">{{ date('d/m/y', strtotime($agenda->data)) }} - {{ \Carbon\Carbon::parse($agenda->hora)->format('H:i') }}</a>
                             <td>
                                 <form action="/events/leave/{{ $agenda->equipeAdversario->id }}" method="post">
                                     @csrf
