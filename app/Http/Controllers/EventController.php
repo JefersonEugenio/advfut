@@ -10,6 +10,8 @@ use App\Models\Comentario;
 use App\Notifications\AgendaDeletedNotification;
 use App\Notifications\AgendaJoinedNotification;
 use App\Notifications\AgendaDesistirNotification;
+use App\Notifications\AgendaEditNotification;
+use App\Notifications\AgendaFinalizarNotification;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -247,11 +249,20 @@ class EventController extends Controller {
         return view('events.teamsedit', ['equipes' => $equipes]);
     }
 
-    public function update(Request $request) {
+    public function update(Request $request, $id) {
 
         $data = $request->all();
 
         Agenda::findOrFail($request->id)->update($data);
+
+        $agenda = Agenda::findOrFail($id);
+
+        $adversario = $agenda->equipeAdversario;
+
+        $userAdversario = $adversario->user;
+        
+        // Enviar notificação ao adversário
+        $userAdversario->notify(new AgendaEditNotification($agenda));
 
         return redirect('/dashboard')->with('msg', 'Editado com sucesso!');
     }
@@ -378,39 +389,46 @@ class EventController extends Controller {
     public function finalizar(Request $request, $id)
     {
 
-    // Encontrar a agenda
-    $agenda = Agenda::findOrFail($id);
+        // Encontrar a agenda
+        $agenda = Agenda::findOrFail($id);
 
-    // Validar os dados enviados
-    $validated = $request->validate([
-        'timeA' => 'required|integer|min:0|max:99',
-        'timeB' => 'required|integer|min:0|max:99',
-        'notas_adversario' => 'required|integer|min:0|max:5',
-        'comentarios' => 'nullable|string|max:255',
-        'status' => 'required|boolean', // Validar o status como booleano
-        'equipeAvaliacao' => 'required|string|max:255'
-    ]);
+        // Validar os dados enviados
+        $validated = $request->validate([
+            'timeA' => 'required|integer|min:0|max:99',
+            'timeB' => 'required|integer|min:0|max:99',
+            'notas_adversario' => 'required|integer|min:0|max:5',
+            'comentarios' => 'nullable|string|max:255',
+            'status' => 'required|boolean', // Validar o status como booleano
+            'equipeAvaliacao' => 'required|string|max:255'
+        ]);
 
-    $resultado = $validated['timeA'] . ' X ' . $validated['timeB'];
+        $resultado = $validated['timeA'] . ' X ' . $validated['timeB'];
 
-    // Atualizar a agenda
-    $agenda->status = $validated['status'];
-    $agenda->resultado = $resultado;
-    $agenda->save();
+        // Atualizar a agenda
+        $agenda->status = $validated['status'];
+        $agenda->resultado = $resultado;
+        $agenda->save();
 
-    /// Criar uma nova nota
-    Nota::create([
-        'equipe_id' => $agenda->equipe_adversario,
-        'equipe_avaliacao' => $validated['equipeAvaliacao'],
-        'avaliacao_nota' => $validated['notas_adversario'],
-    ]);
+        /// Criar uma nova nota
+        Nota::create([
+            'equipe_id' => $agenda->equipe_adversario,
+            'equipe_avaliacao' => $validated['equipeAvaliacao'],
+            'avaliacao_nota' => $validated['notas_adversario'],
+        ]);
 
-    // Criar um novo comentário
-    Comentario::create([
-        'equipe_id' => $agenda->equipe_adversario,
-        'equipe_avaliacao' => $validated['equipeAvaliacao'],
-        'avaliacao_comentario' => $validated['comentarios'],
-    ]);
+        // Criar um novo comentário
+        Comentario::create([
+            'equipe_id' => $agenda->equipe_adversario,
+            'equipe_avaliacao' => $validated['equipeAvaliacao'],
+            'avaliacao_comentario' => $validated['comentarios'],
+        ]);
+
+        $adversario = $agenda->equipeAdversario;
+
+        $userAdversario = $adversario->user;
+        
+        // Enviar notificação ao adversário
+        $userAdversario->notify(new AgendaFinalizarNotification($agenda));
 
         // Redirecionar com uma mensagem de sucesso
         return redirect('/dashboard')->with('msg', 'Resultado e comentários registrados com sucesso!');
