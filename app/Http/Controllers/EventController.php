@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Equipe;
 use App\Models\Agenda;
 use App\Models\User;
+use App\Models\Nota;
+use App\Models\Comentario;
 use App\Notifications\AgendaDeletedNotification;
 use App\Notifications\AgendaJoinedNotification;
 use App\Notifications\AgendaDesistirNotification;
@@ -73,9 +75,9 @@ class EventController extends Controller {
     }
 
     public function createteam(Request $request) {
-        $time = new Equipe();
+        $equipe = new Equipe();
 
-        $time->clube = $request->clube;
+        $equipe->clube = $request->clube;
 
         // Image Upload
         if($request->hasFile('imagem') && $request->file('imagem')->isValid()) {
@@ -88,17 +90,15 @@ class EventController extends Controller {
 
             $requestImage->move(public_path('img/events'), $imageName);
 
-            $time->imagem = $imageName;
+            $equipe->imagem = $imageName;
 
         }
 
         // video #23
         $user = auth()->user();
-        $time->user_id = $user->id;
+        $equipe->user_id = $user->id;
         
-        $time->save();
-
-        // $time->equipe()->create(['name' => $request->name]);
+        $equipe->save();
 
         return redirect('/')->with('msg', 'Seu time foi criado com sucesso!');
 
@@ -171,19 +171,26 @@ class EventController extends Controller {
     }
 
     public function teams($id) {
-        // Verifique se o usuário autenticado já está participando deste evento
+        
         $user = auth()->user();
 
         $equipe = Equipe::findOrFail($id);
-    
-        // Encontre o dono do evento
-        $eventOwner = User::where('id', $equipe->user_id)->first();
-    
+
+        // $comentario = Comentario::all();
+        // $nota = Nota::all();
+
+        // Carregar os comentários relacionados a essa equipe
+        $comentarios = Comentario::where('equipe_id', $id)->get();
+        $notas = Nota::where('equipe_id', $id)->get();
+
+        $comentariosNotas = $comentarios->zip($notas);
     
         return view('events.teams', [
             'user' => $user,
             'equipe' => $equipe,
-            'eventOwner' => $eventOwner
+            'comentarios' => $comentarios,
+            'notas' => $notas,
+            'comentariosNotas' => $comentariosNotas
         ]);
 
     }
@@ -370,24 +377,40 @@ class EventController extends Controller {
 
     public function finalizar(Request $request, $id)
     {
-        // Encontrar a agenda
-        $agenda = Agenda::findOrFail($id);
-        $adversario = $agenda->equipeAdversario;
 
-        $agenda->status = $request->status;
+    // Encontrar a agenda
+    $agenda = Agenda::findOrFail($id);
 
-        // Validar os dados enviados
-        $validated = $request->validate([
-            'resultado' => 'required|string|max:10',
-        ]);
+    // Validar os dados enviados
+    $validated = $request->validate([
+        'timeA' => 'required|integer|min:0|max:99',
+        'timeB' => 'required|integer|min:0|max:99',
+        'notas_adversario' => 'required|integer|min:0|max:5',
+        'comentarios' => 'nullable|string|max:255',
+        'status' => 'required|boolean', // Validar o status como booleano
+        'equipeAvaliacao' => 'required|string|max:255'
+    ]);
 
-        // Atualizar os campos com os dados fornecidos
-        $agenda->resultado = $validated['resultado'];
-        $agenda->save();
+    $resultado = $validated['timeA'] . ' X ' . $validated['timeB'];
 
-        $adversario->avaliacao_nota = $request->notas_adversario;
-        $adversario->avaliacao_comentarios = $request->comentarios;
-        $adversario->save();
+    // Atualizar a agenda
+    $agenda->status = $validated['status'];
+    $agenda->resultado = $resultado;
+    $agenda->save();
+
+    /// Criar uma nova nota
+    Nota::create([
+        'equipe_id' => $agenda->equipe_adversario,
+        'equipe_avaliacao' => $validated['equipeAvaliacao'],
+        'avaliacao_nota' => $validated['notas_adversario'],
+    ]);
+
+    // Criar um novo comentário
+    Comentario::create([
+        'equipe_id' => $agenda->equipe_adversario,
+        'equipe_avaliacao' => $validated['equipeAvaliacao'],
+        'avaliacao_comentario' => $validated['comentarios'],
+    ]);
 
         // Redirecionar com uma mensagem de sucesso
         return redirect('/dashboard')->with('msg', 'Resultado e comentários registrados com sucesso!');

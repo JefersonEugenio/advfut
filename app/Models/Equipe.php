@@ -38,4 +38,12 @@ class Equipe extends Model
         return $this->belongsToMany('App\Models\User', 'equipe_user');
     }
 
+    public function notas() {
+        return $this->hasMany(Nota::class);
+    }
+
+    public function comentarios() {
+        return $this->hasMany(Comentario::class);
+    }
+    
 }
