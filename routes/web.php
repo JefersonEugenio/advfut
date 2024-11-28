@@ -14,7 +14,7 @@ Route::post('/events', [EventController::class, 'store']);
 Route::get('/events/createteams', [EventController::class, 'createteams'])->middleware('auth');
 Route::get('/events/create', [EventController::class, 'create'])->middleware('auth');
 Route::get('/events/{id}', [EventController::class, 'show']);
-Route::post('/eventscreateteam', [EventController::class, 'createteam']); //teste
+Route::post('/eventscreateteam', [EventController::class, 'createteam'])->middleware('auth');
 
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])->name('login');
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
@@ -25,12 +25,15 @@ Route::get('/events/edit/{id}', [EventController::class, 'edit'])->middleware('a
 Route::put('/events/update/{id}', [EventController::class, 'update'])->middleware('auth');
 Route::delete('/events/{id}', [EventController::class, 'deleteAgenda'])->middleware('auth');
 
-Route::get('/teamsdashboard', [EventController::class, 'teams'])->middleware('auth');
+Route::get('/teamsdashboard', [EventController::class, 'teamsdashboard'])->middleware('auth');
+Route::get('/teams/{id}', [EventController::class, 'teams'])->middleware('auth');
 Route::get('/events/teamsedit/{id}', [EventController::class, 'teamsedit'])->middleware('auth');
 Route::put('/events/teamsupdate/{id}', [EventController::class, 'teamsupdate'])->middleware('auth');
 Route::delete('/teamsevents/{id}', [EventController::class, 'teamsdestroy'])->middleware('auth');
 
 Route::get('/notifications', [EventController::class, 'notifications'])->name('notifications');
+Route::get('/events/{id}/finalizar', [EventController::class, 'finalizarJogo'])->middleware('auth');
+Route::post('/events/{id}/finalizar', [EventController::class, 'finalizar'])->middleware('auth');
 
 Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->middleware('auth');
 Route::delete('/events/leave/{id}', [EventController::class, 'leaveEvent'])->middleware('auth');

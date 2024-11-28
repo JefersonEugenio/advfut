@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('cidade');
             $table->string('pagamento');
             $table->text('observacao')->nullable();
+            $table->boolean('status');
             $table->timestamps();
         });
     }

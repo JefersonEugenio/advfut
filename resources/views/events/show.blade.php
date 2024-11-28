@@ -29,7 +29,7 @@
                         @csrf
                         <div>
                             <label for="equipe_id">Escolhe seu time:</label>
-                                <select name="equipe_id" id="equipe_id" class="form-control">
+                                <select name="equipe_id" id="equipe_id" class="form-control" required>
                                     @foreach($user->equipes as $equipe)
                                         <option value="{{ $equipe->id }}">{{ $equipe->clube }}</option>
                                     @endforeach

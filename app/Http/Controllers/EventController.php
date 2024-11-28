@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Equipe;
 use App\Models\Agenda;
 use App\Models\User;
+use App\Models\Nota;
+use App\Models\Comentario;
 use App\Notifications\AgendaDeletedNotification;
 use App\Notifications\AgendaJoinedNotification;
 use App\Notifications\AgendaDesistirNotification;
+use App\Notifications\AgendaEditNotification;
+use App\Notifications\AgendaFinalizarNotification;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -64,6 +68,7 @@ class EventController extends Controller {
         $agendas->cidade = $request->cidade;
         $agendas->pagamento = $request->pagamento;
         $agendas->observacao = $request->observacao;
+        $agendas->status = $request->status;
         
         $agendas->save();
 
@@ -72,9 +77,9 @@ class EventController extends Controller {
     }
 
     public function createteam(Request $request) {
-        $time = new Equipe();
+        $equipe = new Equipe();
 
-        $time->clube = $request->clube;
+        $equipe->clube = $request->clube;
 
         // Image Upload
         if($request->hasFile('imagem') && $request->file('imagem')->isValid()) {
@@ -87,17 +92,15 @@ class EventController extends Controller {
 
             $requestImage->move(public_path('img/events'), $imageName);
 
-            $time->imagem = $imageName;
+            $equipe->imagem = $imageName;
 
         }
 
         // video #23
         $user = auth()->user();
-        $time->user_id = $user->id;
+        $equipe->user_id = $user->id;
         
-        $time->save();
-
-        // $time->equipe()->create(['name' => $request->name]);
+        $equipe->save();
 
         return redirect('/')->with('msg', 'Seu time foi criado com sucesso!');
 
@@ -157,7 +160,7 @@ class EventController extends Controller {
         ]);
     }
 
-    public function teams() {
+    public function teamsdashboard() {
 
         $user = auth()->user();
 
@@ -167,6 +170,31 @@ class EventController extends Controller {
             'user' => $user,
             'equipes' => $equipes
         ]);
+    }
+
+    public function teams($id) {
+        
+        $user = auth()->user();
+
+        $equipe = Equipe::findOrFail($id);
+
+        // $comentario = Comentario::all();
+        // $nota = Nota::all();
+
+        // Carregar os comentários relacionados a essa equipe
+        $comentarios = Comentario::where('equipe_id', $id)->get();
+        $notas = Nota::where('equipe_id', $id)->get();
+
+        $comentariosNotas = $comentarios->zip($notas);
+    
+        return view('events.teams', [
+            'user' => $user,
+            'equipe' => $equipe,
+            'comentarios' => $comentarios,
+            'notas' => $notas,
+            'comentariosNotas' => $comentariosNotas
+        ]);
+
     }
 
     public function destroy($id) {
@@ -221,11 +249,20 @@ class EventController extends Controller {
         return view('events.teamsedit', ['equipes' => $equipes]);
     }
 
-    public function update(Request $request) {
+    public function update(Request $request, $id) {
 
         $data = $request->all();
 
         Agenda::findOrFail($request->id)->update($data);
+
+        $agenda = Agenda::findOrFail($id);
+
+        $adversario = $agenda->equipeAdversario;
+
+        $userAdversario = $adversario->user;
+        
+        // Enviar notificação ao adversário
+        $userAdversario->notify(new AgendaEditNotification($agenda));
 
         return redirect('/dashboard')->with('msg', 'Editado com sucesso!');
     }
@@ -347,6 +384,60 @@ class EventController extends Controller {
         $notifications = $user->notifications()->latest()->get();
 
         return view('notifications.index', ['notifications' => $notifications]);
+    }
+
+    public function finalizar(Request $request, $id)
+    {
+
+        // Encontrar a agenda
+        $agenda = Agenda::findOrFail($id);
+
+        // Validar os dados enviados
+        $validated = $request->validate([
+            'timeA' => 'required|integer|min:0|max:99',
+            'timeB' => 'required|integer|min:0|max:99',
+            'notas_adversario' => 'required|integer|min:0|max:5',
+            'comentarios' => 'nullable|string|max:255',
+            'status' => 'required|boolean', // Validar o status como booleano
+            'equipeAvaliacao' => 'required|string|max:255'
+        ]);
+
+        $resultado = $validated['timeA'] . ' X ' . $validated['timeB'];
+
+        // Atualizar a agenda
+        $agenda->status = $validated['status'];
+        $agenda->resultado = $resultado;
+        $agenda->save();
+
+        /// Criar uma nova nota
+        Nota::create([
+            'equipe_id' => $agenda->equipe_adversario,
+            'equipe_avaliacao' => $validated['equipeAvaliacao'],
+            'avaliacao_nota' => $validated['notas_adversario'],
+        ]);
+
+        // Criar um novo comentário
+        Comentario::create([
+            'equipe_id' => $agenda->equipe_adversario,
+            'equipe_avaliacao' => $validated['equipeAvaliacao'],
+            'avaliacao_comentario' => $validated['comentarios'],
+        ]);
+
+        $adversario = $agenda->equipeAdversario;
+
+        $userAdversario = $adversario->user;
+        
+        // Enviar notificação ao adversário
+        $userAdversario->notify(new AgendaFinalizarNotification($agenda));
+
+        // Redirecionar com uma mensagem de sucesso
+        return redirect('/dashboard')->with('msg', 'Resultado e comentários registrados com sucesso!');
+    }
+
+    public function finalizarJogo($id)
+    {
+        $agenda = Agenda::findOrFail($id);
+        return view('events.finalizar', ['agenda' => $agenda]);
     }
 
 }
