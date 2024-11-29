@@ -27,10 +27,10 @@
                     </a>
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a href="/" class="nav-link">Home</a>
+                            <a href="/" class="nav-link">Principal</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/adversary" class="nav-link">Eventos</a>
+                            <a href="/adversary" class="nav-link">Partida</a>
                         </li>
                         <li class="nav-item">
                             <a href="/events/createteams" class="nav-link">Criar time</a>
@@ -40,15 +40,15 @@
                         </li>
                         @auth
                         <li class="nav-item">
-                            <a href="/teamsdashboard" class="nav-link">Meus times</a>
+                            <a href="/teamsdashboard" class="nav-link">Meu time</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/dashboard" class="nav-link">Meus partidas</a>
+                            <a href="/dashboard" class="nav-link">Meu partida</a>
                         </li>
                         <li class="nav-item">
                         <a href="/notifications" class="nav-link">
                             <?php $noti = auth()->user()->unreadNotifications->count(); ?>
-                                Notificações
+                                Notificação
                                 @php
                                     $noti = auth()->user()->unreadNotifications->count();
                                 @endphp
