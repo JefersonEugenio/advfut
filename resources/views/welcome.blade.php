@@ -18,7 +18,6 @@
         <h2>Próximos adversários</h2>
         <p class="subtitle">Confira os adversários dos próximos dias</p>
     @endif
-    <p>usuario: {{ auth()->id() }}</p>
     
     <div id="cards-container" class="row">
     @foreach($agendas as $agenda)
