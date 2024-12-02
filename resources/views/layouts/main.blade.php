@@ -32,13 +32,13 @@
                         <li class="nav-item">
                             <a href="/adversary" class="nav-link">Partida</a>
                         </li>
+                        @auth
                         <li class="nav-item">
                             <a href="/events/createteams" class="nav-link">Criar time</a>
                         </li>
                         <li class="nav-item">
                             <a href="/events/create" class="nav-link">Criar partida</a>
                         </li>
-                        @auth
                         <li class="nav-item">
                             <a href="/teamsdashboard" class="nav-link">Meu time</a>
                         </li>
