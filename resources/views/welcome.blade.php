@@ -35,7 +35,6 @@
                             <div class="card-date">Quadra: {{ $agenda->tipo }}</div>
                             <div class="card-date">Disponivel para {{ date('d/m/y', strtotime($agenda->data)) }} e horario: {{ \Carbon\Carbon::parse($agenda->hora)->format('H:i') }}</div>
                             <a href="/events/{{ $agenda->id }}" class="btn btn-primary">Saber mais</a>
-                            agenda id: {{ $agenda->id }}
                         </div>
                     </div>
                 @endif

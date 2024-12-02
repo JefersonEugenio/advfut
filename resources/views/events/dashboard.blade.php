@@ -55,7 +55,7 @@
             </table>
         @else
             <br>
-            <p>Você ainda não tem agenda, <a href="/events/create">criar uma agenda</a></p>
+            <p>Você ainda não tem partida, <a href="/events/create">criar uma partida</a></p>
         @endif
     @else
         <br>
@@ -81,7 +81,6 @@
             <tbody>
                 @foreach($agendas as $agenda)
                     @if(auth()->id() == optional($agenda->equipeAdversario)->user_id && $agenda->status == 1)
-                    Meu id: {{auth()->id()}} - agenda: {{ $agenda->id }} - equipe id: {{ $agenda->equipeAdversario->id }}
                         <tr>
                             <td>
                                 <a href="/teams/{{ $agenda->equipeAdversario->id }}">{{ $agenda->equipeAdversario->clube }}</a>

@@ -21,7 +21,7 @@
                     <tbody>                    
                         <tr>
                             <td>
-                                <a href="/teams/{{ $equipe->id }}">{{ $equipe->id }} - {{ $equipe->clube }}</a><br>
+                                <a href="/teams/{{ $equipe->id }}">{{ $equipe->clube }}</a><br>
                             </td>
                             <td>
                                 <a href="/events/teamsedit/{{ $equipe->id }}" class="btn btn-info edit-btn"><ion-icon name="create-outline"></ion-icon>Editar</a>

@@ -9,7 +9,6 @@
     <form action="/events" method="POST" enctype="multipart/form-data" id="eventForm">
         @csrf
         <input type="hidden" name="user_id" value="{{ auth()->id() }}">
-        <p>{{ auth()->id() }}</p>
         <div class="form-group">
             <label for="equipe_id">Escolhe seu time:</label>
             <select name="equipe_id" id="equipe_id" class="form-control" required>
