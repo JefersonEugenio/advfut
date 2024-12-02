@@ -178,6 +178,8 @@ class EventController extends Controller {
 
         $equipe = Equipe::findOrFail($id);
 
+        $eventOwner = User::where('id', $equipe->user_id)->first();
+
         // $comentario = Comentario::all();
         // $nota = Nota::all();
 
@@ -192,7 +194,8 @@ class EventController extends Controller {
             'equipe' => $equipe,
             'comentarios' => $comentarios,
             'notas' => $notas,
-            'comentariosNotas' => $comentariosNotas
+            'comentariosNotas' => $comentariosNotas,
+            'eventOwner' => $eventOwner
         ]);
 
     }
