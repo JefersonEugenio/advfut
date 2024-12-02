@@ -3,12 +3,7 @@
 @section('content')
     <div class="w-full flex flex-col">
         <div class="bg-cover bg-bottom w-full h-[500px] flex items-start justify-center" style="background-image:url('/img/torcedores.jpg')">
-            <header class="w-full max-w-7xl py-5 px-5 flex flex-col sm:flex-row items-center justify-between">
-                <div class="">
-                    <img src="/img/ADVFUTlogo.png" alt="Logo AdvFut" class="w-20" />
-                </div>
-                <x-header-menu />
-            </header>
+            <x-header />
         </div>
         <div class="w-full flex justify-center">
             <div class="w-full max-w-7xl py-8 px-3 flex flex-col justify-center gap-5">
