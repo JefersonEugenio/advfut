@@ -12,7 +12,7 @@
                 <img src="/img/events/{{ $equipe->imagem }}" class="img-fluid" style="max-width: 200px; height: auto;" alt="{{ $equipe->clube }}">
         </div>
         <div id="info-container" class="col-md-6">
-            <p class="event-club"><ion-icon name="body-outline"></ion-icon> {{ $user->name }} </p>
+            <p class="event-club"><ion-icon name="body-outline"></ion-icon> {{ $eventOwner->name }} </p>
             <p class="event-club"><ion-icon name="shield-outline"></ion-icon> {{ $equipe->clube }} </p>
         </div>
 
