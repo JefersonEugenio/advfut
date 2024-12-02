@@ -43,7 +43,7 @@
                             <a href="/teamsdashboard" class="nav-link">Meu time</a>
                         </li>
                         <li class="nav-item">
-                            <a href="/dashboard" class="nav-link">Meu partida</a>
+                            <a href="/dashboard" class="nav-link">Minha partida</a>
                         </li>
                         <li class="nav-item">
                         <a href="/notifications" class="nav-link">
