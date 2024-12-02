@@ -374,7 +374,7 @@ class EventController extends Controller {
         // Apagar a agenda
         $agenda->delete();
     
-        return redirect('/dashboard')->with('msg', 'Agenda deletada com sucesso!');
+        return redirect('/dashboard')->with('msg', 'A partida foi deletada com sucesso!');
     }
 
     public function notifications() {
