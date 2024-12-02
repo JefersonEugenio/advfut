@@ -14,7 +14,7 @@
 
         <div id="info-container" class="col-md-4">
             <p class="event-club"><ion-icon name="body-outline"></ion-icon> {{ $eventOwner->name }} </p>
-            <p class="event-club"><ion-icon name="shield-outline"></ion-icon> {{ $equipe->clube }} </p>
+            <a href="/teams/{{ $equipe->id }}"><ion-icon name="shield-outline"></ion-icon>{{ $equipe->clube }}</a>
             <p class="event-date"><ion-icon name="calendar-number-outline"></ion-icon> {{ date('d/m/y', strtotime($agenda->data)) }}</p>
             <p class="event-horario"><ion-icon name="alarm-outline"></ion-icon> {{ \Carbon\Carbon::parse($agenda->hora)->format('H:i') }} </p>
             <p class="event-dure"><ion-icon name="stopwatch-outline"></ion-icon> {{ \Carbon\Carbon::parse($agenda->duracao)->format('H:i') }} </p>
