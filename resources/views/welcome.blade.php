@@ -31,7 +31,7 @@
                             <img src="/img/emblema.png" alt="emblema vazio">
                         @endif
                         <div class="card-body">
-                            <h5 class="card-title">{{ $equipe->clube }}</h5>equipe id: {{$equipe->id}}
+                            <h5 class="card-title">{{ $equipe->clube }}</h5>
                             <div class="card-date">Quadra: {{ $agenda->tipo }}</div>
                             <div class="card-date">Disponivel para {{ date('d/m/y', strtotime($agenda->data)) }} e horario: {{ \Carbon\Carbon::parse($agenda->hora)->format('H:i') }}</div>
                             <a href="/events/{{ $agenda->id }}" class="btn btn-primary">Saber mais</a>
