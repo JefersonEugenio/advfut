@@ -25,7 +25,6 @@
     @method('POST')
     
     <div class="form-group">
-        <label for="resultado">Resultado do jogo: {{ $agenda->id }}</label>
         <div class="resultado-jogo">
             {{ $agenda->equipeMe->clube }}
             <input type="number" name="timeA" class="form-control" id="timeA" max="99" required>
