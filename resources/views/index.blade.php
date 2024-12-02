@@ -16,8 +16,6 @@
                 <p class="text-center">Você precisa avaliar o seu adversário em diversos critérios e vice-versa (pontualidade, fair play, uniforme e muito mais). Como cada time é avaliado pelo seu adversário, o seu time acaba criando a própria reputação, que pode ser consultada por todos. Assim, você pode avaliar os times antes aceitar convites.</p>
             </div>
         </div>
-        <footer class="bg-slate-800 w-full h-20 px-8 text-white flex items-center justify-center">
-            AdvFut &copy; 2024
-        </footer>
+        <x-footer />
     </div>
 @endsection

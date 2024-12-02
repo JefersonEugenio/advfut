@@ -54,5 +54,6 @@
                 </div>
             </div>
         </div>
+        <x-footer />
     </div>
 @endsection
