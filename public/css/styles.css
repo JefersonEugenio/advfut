@@ -22,6 +22,10 @@ header {
     padding: 0;
 }
 
+.btn {
+    margin-top: 5px;
+}
+
 .btn-primary {
     background-color: #f2a340 !important;
     border: 2px solid #c28008 !important;
@@ -30,6 +34,11 @@ header {
 .btn-primary:hover {
     background-color: #003366 !important;
     border-color: #003366 !important;
+}
+
+.btn-primary:active {
+    background-color: #003366;
+    border-color: #003366;
 }
 
 .msg {
@@ -185,9 +194,6 @@ header {
     font-size: 12px;
 }
 
-.btn {
-    margin-top: 5px;
-}
 
 /* Event page */
 #image-container,
