@@ -45,7 +45,7 @@
                                             <option value="{{ $equipe->id }}">{{ $equipe->clube }}</option>
                                         @endforeach
                                     </select>
-                                    <button type="submit" class="bg-orange-400 w-full sm:w-auto px-8 h-12 text-white rounded-md hover:bg-blue-700" id="event-submit">Confirmar partida</button>
+                                    <button type="submit" class="bg-orange-400 w-full sm:w-auto px-8 h-12 text-white rounded-md hover:bg-blue-900" id="event-submit">Confirmar partida</button>
                                 </form>
                             @else
                                 <p class="already-joined-msg">Esse time já está participando deste jogo contra o
