@@ -40,7 +40,7 @@
                                             <div class="card-date">Disponivel para {{ date('d/m/y', strtotime($agenda->data)) }}</div>
                                             <div>Horario: {{ \Carbon\Carbon::parse($agenda->hora)->format('H:i') }}</div>
                                             <a href="/events/{{ $agenda->id }}">
-                                                <button class="bg-orange-400 w-full sm:w-auto px-8 h-12 text-white rounded-md" type="button">saber mais</button>
+                                                <button class="bg-blue-900 w-full sm:w-auto px-8 h-12 text-white rounded-md" type="button">saber mais</button>
                                             </a>
                                         </div>
                                     </div>
