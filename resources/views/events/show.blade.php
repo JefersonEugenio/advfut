@@ -54,8 +54,7 @@
                                     {{ $agenda->equipeAdversario->clube }}</p>
                             @endif
                         @else
-                            <p class="login-msg">Para confirmar a participação, -> <a href="/login">faça login</a> <- na
-                                    sua conta.</p>
+                            <p class="login-msg">Para confirmar a participação, -> <a href="/login"><b><u></u>faça login</a></u></b> <- na sua conta.</p>
                         @endif
                     </div>
                 </div>
