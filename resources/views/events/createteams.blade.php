@@ -16,7 +16,8 @@
             <label for="title">Nome do time:</label>
             <input type="text" class="form-control" id="clube" name="clube" placeholder="Ex: F. C. IFRS" required>
         </div>
-        <input type="submit" value="Criar time" class="bg-orange-400 w-full sm:w-auto px-8 h-12 text-white rounded-md hover:bg-blue-900">
+        
+        <input type="submit" value="Criar time" class="btn btn-primary">
     </form>
 </div>
 
