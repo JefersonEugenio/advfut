@@ -36,20 +36,21 @@
                         </div>
 
                         @if (auth()->check())
-                            @if ($agenda->equipe_adversario == null)
+                            @if (auth()->id() == $agenda->user_id)
+                                <p class="alert-msg text-red-600">Você não pode confirmar a partida porque é o dono do evento.</p>
+                            @elseif ($agenda->equipe_adversario == null)
                                 <form action="/events/join/{{ $agenda->id }}" method="POST" class="flex flex-col sm:flex-row items-end justify-end gap-3">
                                     @csrf
                                     <select name="equipe_id" id="equipe_id" class="w-full sm:w-auto h-12 rounded-md" required>
+                                        <option disabled selected>Selecione uma equipe</option>
                                         @foreach ($user->equipes as $equipe)
-                                            <option disabled>Selecione uma equipe</option>
                                             <option value="{{ $equipe->id }}">{{ $equipe->clube }}</option>
                                         @endforeach
                                     </select>
                                     <button type="submit" class="bg-orange-400 w-full sm:w-auto px-8 h-12 text-white rounded-md hover:bg-blue-900" id="event-submit">Confirmar partida</button>
                                 </form>
                             @else
-                                <p class="already-joined-msg">Esse time já está participando deste jogo contra o
-                                    adversário:
+                                <p class="already-joined-msg">Esse time já está participando deste jogo contra o adversário:
                                     {{ $agenda->equipeAdversario->clube }}</p>
                             @endif
                         @else
