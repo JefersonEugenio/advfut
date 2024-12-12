@@ -45,7 +45,7 @@
                                     <form action="/events/join/{{ $agenda->id }}" method="POST" class="flex flex-col sm:flex-row items-end justify-end gap-3">
                                         @csrf
                                         <select name="equipe_id" id="equipe_id" class="w-full sm:w-auto h-12 rounded-md" required>
-                                            <option disabled selected>Selecione uma equipe</option>
+                                            <option value="" disabled selected>Selecione uma equipe</option>
                                             @foreach ($user->equipes as $equipe)
                                                 <option value="{{ $equipe->id }}">{{ $equipe->clube }}</option>
                                             @endforeach
