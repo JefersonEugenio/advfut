@@ -40,7 +40,7 @@
                                 <p class="alert-msg text-red-600">Você não pode confirmar a partida porque é o dono do evento.</p>
                             @elseif ($agenda->equipe_adversario == null)
                                 @if ($user->equipes->isEmpty())
-                                    <p class="no-team-msg text-black">Você ainda não tem um time. <a href="events/createteams" class="text-blue-900 underline">Clique aqui para criar um time.</a></p>
+                                    <p class="no-team-msg text-black">Você ainda não tem um time. <a href="/createteams" class="text-blue-900 underline">Clique aqui para criar um time.</a></p>
                                 @else
                                     <form action="/events/join/{{ $agenda->id }}" method="POST" class="flex flex-col sm:flex-row items-end justify-end gap-3">
                                         @csrf
